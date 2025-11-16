@@ -13,8 +13,6 @@ subroutine mainelast(ce,psi,se,dsedce)
   A0(1)=1.0D00
   A0(2)=0.0d00
   A0(3)=0.0d00  
-  call NEOHOOKEANCOMPRESSIBLE(YOUNG,POISS,CE,PSI,SE,DSEDCE)
-  return
   CALL VECTNORMALIZE(3,A0)
   CALL GUO2008DRIVINGFORCE(A0,CE,FORCE)
 !*** shear modulus of matrix:
@@ -46,12 +44,6 @@ subroutine mainelast(ce,psi,se,dsedce)
   ELSE
      CALL GUO2008MODIFIED(VVMAX,0.2D00*MUM,0.2D00*KM,A0,CE,PSI,SE,DSEDCE,DSEDA0,DSDVV)
   END IF
-!  if(vvn.gt.0.6d00)then
-!     CALL GUO2008MODIFIED(VVMAX,0.05d00*MUM,0.05d00*KM,A0,CE,PSI,SE,DSEDCE,DSEDA0,DSDVV)
-!  end if
-!  call matrixprint(dsedce)
-!  CALL NEOHOOKEANCOMPRESSIBLE(YOUNG,POISS,CE,PSI,SE,DSEDCE)
-!  CALL SAINTVENANT(RMU,RLAMBDA,CE,PSI,SE,DSEDCE)
 end subroutine mainelast
 
 !DIR$ OPTIMIZE:0
@@ -64,7 +56,7 @@ subroutine mainplast(mandel,seq,dseqdmandel,norm,dnormdmandel)
   rsigma=1.387d00
 !  call druckerprager(rsigma,mandel,seq,dseqdmandel,norm,dnormdmandel)
 !  call unsymmetric(rsigma,mandel,seq,dseqdmandel,norm,dnormdmandel)
-  call hosfordcriterionsymm(2.0d00,mandel,seq,dseqdmandel,norm,dnormdmandel)  
+  call hosfordcriterionsymm(8.0d00,mandel,seq,dseqdmandel,norm,dnormdmandel)  
 end subroutine mainplast
 !DIR$ OPTIMIZE:0
 !DIR$ NOINLINE
