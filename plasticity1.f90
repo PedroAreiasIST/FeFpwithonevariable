@@ -8,8 +8,12 @@ subroutine mainelast(ce,psi,se,dsedce)
   real(8),dimension(3)::a0
   real(8),dimension(6,3)::dseda0
   real(8),dimension(6,6)::dsedce
-  young=1.04d9
-  poiss=0.38d00
+!**************
+  young=2.34044d09
+  poiss=0.38d00  
+  call NEOHOOKEANINCOMPRESSIBLE(YOUNG,POISS,CE,PSI,SE,DSEDCE)  
+!!  call neohookeancompressible(young,poiss,ce,psi,se,dsedce)  
+  return
   A0(1)=1.0D00
   A0(2)=0.0d00
   A0(3)=0.0d00  
@@ -54,21 +58,24 @@ subroutine mainplast(mandel,seq,dseqdmandel,norm,dnormdmandel)
   real(8),dimension(6)::mandel,dseqdmandel,norm
   real(8),dimension(6,6)::dnormdmandel
   rsigma=1.387d00
+  st0=62.0d06
 !  call druckerprager(rsigma,mandel,seq,dseqdmandel,norm,dnormdmandel)
 !  call unsymmetric(rsigma,mandel,seq,dseqdmandel,norm,dnormdmandel)
-  call hosfordcriterionsymm(8.0d00,mandel,seq,dseqdmandel,norm,dnormdmandel)  
+  call yld_ghorbel(rsigma,st0,mandel,seq,dseqdmandel,norm,dnormdmandel)
+!  call hosfordcriterionsymm(8.0d00,mandel,seq,dseqdmandel,norm,dnormdmandel)  
 end subroutine mainplast
 !DIR$ OPTIMIZE:0
 !DIR$ NOINLINE
 subroutine mainhard(kn,kn1,y,dydk)
   implicit real(8)(a-h,o-z)
   real(8)::n,kn,kn1,y,dydk
-!!$  st0=62.0d06
-!!$  ssat=78.0d06
-!!$  b=14.0d00
-!!$  n=1.30d00
-!!$  y=ssat-(ssat-st0)*exp(-b*kn1**n)
-!!$  dydk=1.0d00*n*(ssat-st0)*(b*kn1**(n-1.0d00))*exp(-b*kn1**n)
+  st0=62.0d06
+  ssat=78.0d06
+  b=14.0d00
+  n=1.30d00
+  y=ssat-(ssat-st0)*exp(-b*kn1**n)
+  dydk=1.0d00*n*(ssat-st0)*(b*kn1**(n-1.0d00))*exp(-b*kn1**n)
+  return
   if (kn <= 0.03d00) then
 ! Linear hardening region
      Y = 37.0d0 + 20.0d0 * kn1
@@ -199,6 +206,7 @@ SUBROUTINE substepping1(NSUBI,SUBELAST,SUBPLAST,SUBHARD,GN,GN1,KN,KN1,STRAIN,PSI
         END IF
      END DO
   END DO
+!  write(*,*)"Dstressdstrain(4,4)",dstressdstrain(4,4)
 END SUBROUTINE substepping1
 
 !--------------------
