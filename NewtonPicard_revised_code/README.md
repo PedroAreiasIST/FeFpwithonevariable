@@ -11,6 +11,8 @@ Section, figure and table numbers are those of the revised manuscript.
 |---|---|
 | `npicard_plasticity.f90` | The module. `np_update_alg1`: Algorithm 1 (scalar iteration on the multiplier at a frozen flow direction, Picard update of the direction, consistent tangent of Section 5). `np_update_sub`: the adaptive substepping of Section 6.5 with the exact tangent of the substepped increment. `np_update_base`: the staggered-hardening Newton baseline of Section 8.2. Elastic laws and yield functions of Section 8.1 (Hosford, the polycarbonate criterion, Yld2004-18p). The header of the file states the model, the conventions and the status codes. |
 | `npicard_guo_kernel.f90` | Energy, stress and tangent of the PLA model of Section 8.1.2 (code generated with AceGen). |
+| `acegen/yld_ghorbel.nb` | Mathematica/AceGen notebook of the polycarbonate criterion of Section 8.1.1; its output is the generated part of the criterion in `npicard_plasticity.f90`. |
+| `acegen/guo2008voidfromforce.nb`, `acegen/guo2008drivingforce.nb`, `acegen/guo2008modified.nb` | Mathematica/AceGen notebooks of the three routines of `npicard_guo_kernel.f90`: void fraction from the driving force, driving force (largest transverse stretch), and energy with its stress and tangent. |
 | `pctests.f90` | Tension and shear tests of the polycarbonate: Figures 2 and 3, the numbers of Section 8.1.1. |
 | `wkmap.f90` | Stored energy and hardening variable over the strain plane: Figures 4 and 7. |
 | `isomap.f90` | Iso-error maps: Table 3, Figures 9 to 13. |
@@ -29,7 +31,8 @@ scripts. Table 2 and Figure 8 are evaluations of the Yld2004-18p function (`np_y
 
 ## Build and run
 
-Requirements: gfortran, GNU make, bash and awk. No library is needed.
+Requirements: gfortran, GNU make, bash and awk. No library is needed. Mathematica with AceGen is needed only to
+regenerate the routines of `acegen/`; the generated Fortran is already in the module and the kernel.
 
 ```
 make                 # the ten programs

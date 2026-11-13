@@ -11,7 +11,8 @@ Fortran 2003 module and programs that reproduce the material-point results of th
 (safeguarded scalar Newton iteration for the plastic multiplier at a frozen flow direction, Picard update of the
 direction, consistent tangent), the adaptive substepping with the exact tangent of a substepped increment, the
 staggered-hardening Newton baseline, and the materials of the examples (polycarbonate, porous PLA, AA2090-T3 with
-Yld2004-18p). Requirements: gfortran and GNU make.
+Yld2004-18p). Requirements: gfortran and GNU make. The Mathematica/AceGen notebooks that generate the polycarbonate
+criterion and the energy of the PLA model are in `NewtonPicard_revised_code/acegen/`.
 
 ```
 cd NewtonPicard_revised_code
