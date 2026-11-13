@@ -15,8 +15,9 @@ Section, figure and table numbers are those of the revised manuscript.
 | `acegen/guo2008voidfromforce.nb`, `acegen/guo2008drivingforce.nb`, `acegen/guo2008modified.nb` | Mathematica/AceGen notebooks of the three routines of `npicard_guo_kernel.f90`: void fraction from the driving force, driving force (largest transverse stretch), and energy with its stress and tangent. |
 | `pctests.f90` | Tension and shear tests of the polycarbonate: Figures 2 and 3, the numbers of Section 8.1.1. |
 | `wkmap.f90` | Stored energy and hardening variable over the strain plane: Figures 4 and 7. |
-| `isomap.f90` | Iso-error maps: Table 3, Figures 9 to 13. |
-| `basemap.f90` | The baseline on the PLA map: Figure 10(f) and the baseline numbers of Section 8.2. |
+| `maymap.f90` | Iso-error maps of Figures 9 to 13 and their numbers in Section 8.2: the path to each state in N equal increments with one update each, against the same update in 90 increments, error over the normal components; the converged update in one increment against 90 increments; the baseline in N increments (Figure 10(f)). |
+| `isomap.f90` | Single increments on the maps: Table 3 and its numbers in Section 8.2. |
+| `basemap.f90` | The baseline in a single increment on the PLA map: the baseline numbers of Section 8.2. |
 | `limitscan.f90` | Largest trial ratio of a single increment along rays: the ratios 1.18, 1.29, 1.28 and 1.03 of Section 8.2. |
 | `raydiag.f90` | The first ray of a single increment (no root, root passed by the doubling): the shares of Section 8.2. |
 | `countmap.f90` | Iteration counts of Section 6.4. |
@@ -27,7 +28,8 @@ Section, figure and table numbers are those of the revised manuscript.
 
 Not here: the framed beam of Section 8.3 was computed with this module inside the authors' finite element code,
 which is not part of this package, and the figures were drawn from the output files with the authors' plotting
-scripts. Table 2 and Figure 8 are evaluations of the Yld2004-18p function (`np_yield` with `np_barlat_set`).
+scripts; the maps of Figures 9 to 13 after a Gaussian filter of radius 4 grid points, as their captions state.
+Table 2 and Figure 8 are evaluations of the Yld2004-18p function (`np_yield` with `np_barlat_set`).
 
 ## Build and run
 
@@ -35,7 +37,7 @@ Requirements: gfortran, GNU make, bash and awk. No library is needed. Mathematic
 regenerate the routines of `acegen/`; the generated Fortran is already in the module and the kernel.
 
 ```
-make                 # the ten programs
+make                 # the eleven programs
 make check           # tension and shear tests with ten increments against check/ (a few seconds)
 ./run_paper.sh       # every run of the paper, outputs in out/   (./run_paper.sh light | maps for a part)
 ```
@@ -55,10 +57,14 @@ map of AA2090-T3 from the undeformed state; `./run_paper.sh light` takes a few m
 |---|---|---|
 | `pctests tension\|shear <Ns> <Nn>` | `pc_<test>_<Ns>_<Nn>.txt` | Figures 2 and 3; `Nn` = 0 is the converged update |
 | `wkmap pc\|pla 200` | `wk_pc.txt`, `wk_pla.txt` | Figures 4 and 7 |
-| `isomap pc\|pla virgin 81 0.25 1000` | `pc_virgin.txt`, `pla_virgin.txt` | Table 3, Figures 9, 10(a)-(e) and 11 |
-| `basemap pla virgin 81 0.25 1000` | `pla_base.txt` | Figure 10(f) |
-| `isomap barlat\|iso point 81 5 1000` | `barlat_point.txt`, `iso_point.txt` | Table 3, Figure 12 |
-| `isomap barlat virgin 81 0.1 1000` | `barlat_virgin.txt` | Table 3, Figure 13 |
+| `maymap pc\|pla virgin 101 0.25 90` | `fig_pc_virgin.txt`, `fig_pla_virgin.txt` | Figures 9, 10(a)-(e) and 11 |
+| `maymap pla virgin 101 0.25 90 base` | `fig_pla_base.txt` | Figure 10(f) |
+| `maymap barlat\|iso point 101 5 90` | `fig_barlat_point.txt`, `fig_iso_point.txt` | Figure 12 |
+| `maymap barlat virgin 101 0.1 90` | `fig_barlat_virgin.txt` | Figure 13 |
+| `isomap pc\|pla virgin 81 0.25 1000` | `pc_virgin.txt`, `pla_virgin.txt` | Table 3, Section 8.2 |
+| `basemap pla virgin 81 0.25 1000` | `pla_base.txt` | Section 8.2 (baseline) |
+| `isomap barlat\|iso point 81 5 1000` | `barlat_point.txt`, `iso_point.txt` | Table 3 |
+| `isomap barlat virgin 81 0.1 1000` | `barlat_virgin.txt` | Table 3 |
 | `limitscan <law> <map> 720`, `limitscan <law> general 2000` | `limit_*.txt` | Section 8.2 |
 | `raydiag pc\|pla` | `raydiag_*.txt` | Section 8.2 |
 | `countmap pla\|pc 81 0.25` | `countmap_*.txt` | Section 6.4 |

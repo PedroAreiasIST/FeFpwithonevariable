@@ -3,8 +3,9 @@
 #   check  the tension and shear tests with ten increments; strain, stress and hardening variable are compared
 #          with check/ (a few seconds)
 #   light  everything except the plane stress maps (a few minutes on one workstation)
-#   maps   the five iso-error maps and the baseline map (about half an hour on 24 cores; the map of AA2090-T3
-#          from the undeformed state takes most of it)
+#   maps   the iso-error maps: the five maps of Table 3 and the baseline map (about half an hour on 24 cores; the
+#          map of AA2090-T3 from the undeformed state takes most of it), and the six maps of the figures (a few
+#          minutes)
 #   all    light and maps (default)
 # The programs use every core (OpenMP); the results do not depend on the number of threads.
 set -e
@@ -39,8 +40,14 @@ light() {
     echo "NNS_PERT=3 NNS_DELTA=1e-7"; NNS_PERT=3 ./nnsens; } > out/nnsens.txt
 }
 
-maps() {               # Section 8.2: iso-error maps (Table 3 and the map figures)
-  ./isomap pc virgin 81 0.25 1000 out/pc_virgin.txt
+maps() {               # Section 8.2: iso-error maps
+  ./maymap pc virgin 101 0.25 90 out/fig_pc_virgin.txt          # Figures 9 to 13: N equal increments
+  ./maymap pla virgin 101 0.25 90 out/fig_pla_virgin.txt
+  ./maymap pla virgin 101 0.25 90 out/fig_pla_base.txt base
+  ./maymap barlat point 101 5 90 out/fig_barlat_point.txt
+  ./maymap iso point 101 5 90 out/fig_iso_point.txt
+  ./maymap barlat virgin 101 0.1 90 out/fig_barlat_virgin.txt
+  ./isomap pc virgin 81 0.25 1000 out/pc_virgin.txt              # Table 3: single increments
   ./isomap pla virgin 81 0.25 1000 out/pla_virgin.txt
   ./basemap pla virgin 81 0.25 1000 out/pla_base.txt
   ./isomap iso point 81 5 1000 out/iso_point.txt
